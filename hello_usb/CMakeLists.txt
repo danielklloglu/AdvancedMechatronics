@@ -55,6 +55,6 @@ elseif(PICO_ON_DEVICE)
     message("Skipping hello_usb because TinyUSB submodule is not initialized in the SDK")
 endif()
 
-# enable usb output, disable uart output
-pico_enable_stdio_usb(hello_gpio_irq 1)
-pico_enable_stdio_uart(hello_gpio_irq 0)
+# # enable usb output, disable uart output
+# pico_enable_stdio_usb(hello_gpio_irq 1)
+# pico_enable_stdio_uart(hello_gpio_irq 0)
