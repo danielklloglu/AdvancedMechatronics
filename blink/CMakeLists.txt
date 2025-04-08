@@ -6,10 +6,6 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# enable usb output, disable uart output
-pico_enable_stdio_usb(hello_gpio_irq 1)
-pico_enable_stdio_uart(hello_gpio_irq 0)
-
 # Initialise pico_sdk from installed location
 # (note this can come from environment, CMake cache etc)
 
@@ -54,4 +50,3 @@ endif()
 pico_add_extra_outputs(blink)
 
 # add url via pico_set_program_url
-
