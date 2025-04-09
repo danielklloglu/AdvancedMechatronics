@@ -127,8 +127,9 @@ int main() {
         // print out ADC0 readings
         while(i <= number){
             uint16_t result = adc_read();
-            printf("%d\n",result);
-            sleep_ms(10);
+            float voltage = (result/4095.) * 3.3;
+            printf("%.2f\n",voltage);
+            sleep_ms(100);
             i++; 
         }    
     }
