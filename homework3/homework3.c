@@ -110,10 +110,26 @@ int main() {
     adc_select_input(0); // select to read from ADC0
 
     while (1) {
-        char message[100];
-        uint16_t result = adc_read();
-        // scanf("%s", message);
-        // printf("message: %d\r\n",result);
-        sleep_ms(50);
+        int i = 0;
+        int number = 0;
+        printf("Number of analog samples (btw 1 and 100): ");
+        scanf("%d", &number);
+        
+        // check to make sure number is between limits
+        if (number > 100){
+            number = 100;
+        }else if (number < 1){
+            number = 1;
+        }
+
+        printf("%d analog samples coming up!\r\n", number);
+        
+        // print out ADC0 readings
+        while(i <= number){
+            uint16_t result = adc_read();
+            printf("%d\n",result);
+            sleep_ms(10);
+            i++; 
+        }    
     }
 }
