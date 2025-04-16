@@ -1,2 +1,2 @@
 # AdvancedMechatronics
-All of my projects fro Advanced Mechatronics!
+All of my projects for Advanced Mechatronics!
