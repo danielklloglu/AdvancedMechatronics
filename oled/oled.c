@@ -2,6 +2,7 @@
 
 #include <string.h> // for memset
 #include "oled.h"
+#include "font.h"
 #include "hardware/i2c.h"
 #include "pico/stdlib.h"
 
