@@ -90,7 +90,7 @@ int main() {
         pixel_on = !pixel_on;
         ssd1306_update();
 
-        sleep_ms(10); // small delay
+        sleep_ms(voltage*20); // small delay
     }
 
     return 0;
