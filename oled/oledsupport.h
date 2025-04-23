@@ -1,5 +1,5 @@
-#ifndef OLED_H__
-#define OLED_H__
+#ifndef OLEDSUPPORT_H__
+#define OLEDSUPPORT_H__
 
 // Based on the adafruit and sparkfun libraries
 #define SSD1306_MEMORYMODE          0x20 
