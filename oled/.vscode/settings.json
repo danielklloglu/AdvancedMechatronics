@@ -38,6 +38,8 @@
     "raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja",
     "files.associations": {
         "oled.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "i2c.h": "c",
+        "oledsupport.h": "c"
     }
 }
