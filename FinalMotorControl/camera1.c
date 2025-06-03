@@ -86,8 +86,3 @@ int main() {
         sleep_ms(100);
     }
 }
-
-// End of camera1.c
-// This code implements a simple camera-guided motor control system using the Raspberry Pi Pico.
-// It captures images, processes them to find a line, and adjusts motor speeds accordingly.
-// The motors are controlled using PWM and direction pins, allowing for smooth operation.
