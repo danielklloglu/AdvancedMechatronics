@@ -1,88 +1,86 @@
+// HW17 - Differential Drive Motor Control with Camera Input
+// Based on tested motor control code using PWM + DIR with DRV8835 H-Bridge
+#include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "cam.h"
 
-// Motor A
-#define AENBL 0     // PWM pin for Motor A speed
-#define APHASE 1    // DIR pin for Motor A
 
-// Motor B
-#define BENBL 2     // PWM pin for Motor B speed
-#define BPHASE 3    // DIR pin for Motor B
+// Motor A (tested configuration)
+#define AENBL 18     // PWM pin for Motor A
+#define APHASE 19    // DIR pin for Motor A
 
-int duty_a = 0; // Range: -100 to +100
-int duty_b = 0; // Range: -100 to +100
+// Motor B (tested configuration)
+#define BENBL 16     // PWM pin for Motor B
+#define BPHASE 17    // DIR pin for Motor B
 
-void set_motor(int duty_percent, uint enbl, uint phase) {
-    // Clamp to -100 to +100
-    if (duty_percent > 100) {
-        duty_percent = 100;
-    }
-    if (duty_percent < -100) {
-        duty_percent = -100;
-    }
+// Control parameters
+const int MAX_DUTY = 100;       // Max PWM duty cycle
+const int DEADBAND = 3;         // No correction if error within this range
+const float SLOPE = 2.5f;       // Proportional control gain
 
-    // Set direction
-    if (duty_percent >= 0) {
-        gpio_put(phase, 1);  // Forward
-    } else {
-        gpio_put(phase, 0);  // Reverse
-    }
-
-    // Set PWM duty cycle
+// Initialize PWM and DIR pin for motor
+void setup_motor(uint enbl, uint phase) {
     gpio_set_function(enbl, GPIO_FUNC_PWM);
+    gpio_init(phase);
+    gpio_set_dir(phase, GPIO_OUT);
+
     uint slice = pwm_gpio_to_slice_num(enbl);
-    pwm_set_wrap(slice, 100);  // 100 = 1% resolution
-    pwm_set_chan_level(slice, pwm_gpio_to_channel(enbl), abs(duty_percent));
+    pwm_set_wrap(slice, 100);
     pwm_set_enabled(slice, true);
+}
+
+// Set motor duty and direction
+void set_motor(int duty_percent, uint enbl, uint phase) {
+    if (duty_percent > MAX_DUTY) duty_percent = MAX_DUTY;
+    if (duty_percent < -MAX_DUTY) duty_percent = -MAX_DUTY;
+
+    gpio_put(phase, duty_percent >= 0);
+
+    uint slice = pwm_gpio_to_slice_num(enbl);
+    pwm_set_chan_level(slice, pwm_gpio_to_channel(enbl), abs(duty_percent));
 }
 
 int main() {
     stdio_init_all();
-
-    // Set up direction pins
-    gpio_init(APHASE);
-    gpio_set_dir(APHASE, GPIO_OUT);
-
-    gpio_init(BPHASE);
-    gpio_set_dir(BPHASE, GPIO_OUT);
-
-    // Wait for serial connection (optional)
     while (!stdio_usb_connected()) {
-        tight_loop_contents();
+        sleep_ms(100);
     }
+    printf("HW17: Motor PWM Differential Controller Starting...\n");
 
-    printf("Dual motor ready.\n");
-    printf("Use '+/-' for Motor A, '[' and ']' for Motor B.\n");
+    // Initialize camera and motor control pins
+    init_camera_pins();
+    setup_motor(AENBL, APHASE);
+    setup_motor(BENBL, BPHASE);
 
     while (true) {
-        int c = getchar_timeout_us(0);
-        
-        if (c != PICO_ERROR_TIMEOUT) {
-            if (c == '+') {
-                if (duty_a < 100) {
-                    duty_a += 1;
-                }
-            } else if (c == '-') {
-                if (duty_a > -100) {
-                    duty_a -= 1;
-                }
-            } else if (c == '[') {
-                if (duty_b < 100) {
-                    duty_b += 1;
-                }
-            } else if (c == ']') {
-                if (duty_b > -100) {
-                    duty_b -= 1;
-                }
-            }
+        setSaveImage(1);
+        while (getSaveImage() == 1) {}
+        convertImage();
 
-            set_motor(duty_a, AENBL, APHASE);
-            set_motor(duty_b, BENBL, BPHASE);
-            printf("Motor A: %d%% | Motor B: %d%%\n", duty_a, duty_b);
+        int com = findLine(IMAGESIZEY / 2);  // Line center from camera
+        int error = com - 30;                // Center of 60-pixel range
+
+        // Deadband logic
+        if (abs(error) < DEADBAND) {
+            error = 0;
         }
 
-        sleep_ms(50);
+        // Control signal scaled by slope
+        int adjust = (int)(SLOPE * error);
+
+        // Base speed
+        int base = MAX_DUTY / 2;
+
+        // Adjust left/right speeds based on direction
+        int left_duty = base - adjust;
+        int right_duty = base + adjust;
+
+        // Apply motor speeds using verified motor control logic
+        set_motor(left_duty, AENBL, APHASE);
+        set_motor(right_duty, BENBL, BPHASE);
+
+        printf("COM: %d | Error: %d | Left: %d | Right: %d\n", com, error, left_duty, right_duty);
+        sleep_ms(100);
     }
 }
