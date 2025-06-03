@@ -28,30 +28,35 @@ set(PICO_BOARD pico2 CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(CameraTrials C CXX ASM)
+project(camera1 C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(CameraTrials CameraTrials.c )
+add_executable(camera1
+    camera1.c
+    cam.c
+)
 
-pico_set_program_name(CameraTrials "CameraTrials")
-pico_set_program_version(CameraTrials "0.1")
+pico_set_program_name(camera1 "camera1")
+pico_set_program_version(camera1 "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(CameraTrials 0)
-pico_enable_stdio_usb(CameraTrials 0)
+pico_enable_stdio_uart(camera1 0)
+pico_enable_stdio_usb(camera1 1)
 
 # Add the standard library to the build
-target_link_libraries(CameraTrials
-        pico_stdlib)
+target_link_libraries(camera1
+        pico_stdlib
+        hardware_i2c
+        hardware_pwm)
 
 # Add the standard include files to the build
-target_include_directories(CameraTrials PRIVATE
+target_include_directories(camera1 PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-pico_add_extra_outputs(CameraTrials)
+pico_add_extra_outputs(camera1)
 
