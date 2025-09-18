@@ -12,6 +12,32 @@
 This repository documents my **Advanced Mechatronics** project for building a **line-following differential drive robot** to compete in the 2025 Tech Cup. The assignment challenged students to design and fabricate a small autonomous robot capable of following a **white line on a purple background** for a 40-foot loop track.
 
 ---
+## Robot CAD and Images
+<table>
+  <tr>
+    <td align="center">
+      <img src="robotcad/robotiso.jpeg" alt="Robot Front View" width="300"/><br>
+      <em>Robot Front View</em>
+    </td>
+    <td align="center">
+      <img src="robotcad/robotCAD.png" alt="Robot CAD Model" width="600"/><br>
+      <em>Robot CAD Model</em>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="robotcad/robotiso.jpeg" alt="Robot Front View" width="300"/><br>
+      <em>Robot Front View</em>
+    </td>
+    <td align="center">
+      <img src="robotcad/robotCAD.png" alt="Robot CAD Model" width="600"/><br>
+      <em>Robot CAD Model</em>
+    </td>
+  </tr>
+</table>
 
 ## 📖 Project Overview
 
