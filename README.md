@@ -29,11 +29,11 @@ This repository documents my **Advanced Mechatronics** project for building a **
 <table>
   <tr>
     <td align="center">
-      <img src="robotcad/IMG_4967.jpeg" alt="Robot Top View" width="300"/><br>
+      <img src="robotcad/IMG_4968.jpeg" alt="Robot Top View" width="450"/><br>
       <em>Robot Top View</em>
     </td>
     <td align="center">
-      <img src="robotcad/IMG_4968.jpeg" alt="Robot Side View" width="600"/><br>
+      <img src="robotcad/IMG_4967.jpeg" alt="Robot Side View" width="450"/><br>
       <em>Robot Side View</em>
     </td>
   </tr>
